@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
             if (!message.member.permissions.has('ADMINISTRATOR') && message.author.id != '427212136134213644') return;
             var member = message.mentions.members.first() || (await message.guild.members.fetch(args[0]).catch(() => {}));
             if (!member) member = message.member;
-            if (!member) member = await message.guild.members.fetch(member.id).catch(() => {}));
+            if (!member) member = await message.guild.members.fetch(member.id).catch(() => {});
             if (!member) return bot.usage(message, 'Fetch Error', 'Der Nutzer kann zurzeit nicht aufgerufen werden.');
             var trustScore = await bot.tools.discord.calculateTrustScore(bot, member);
             args.includes('json') ? bot.reply(message, `Hier ist der TrustScore von ${member.user.username} er beträgt **${trustScore[0]} Punkte**.\n\`\`\`json\n${JSON.stringify({ score: trustScore[0], scores: trustScore[1] }, null, 4)}\n\`\`\``) : bot.reply(message, `Hier ist der TrustScore von ${member.user.username} er beträgt **${trustScore[0]} Punkte**.\n\`\`\`diff\n${trustScore[1].sort().join('\n')}\n\`\`\``);
