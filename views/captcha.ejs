@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<!--
 /*
  * mixelblocks-discordbot | Copyright (C) 2022 | mixelblocks.de
  * Licensed under the MIT License
@@ -37,38 +39,43 @@
  * @since 28.01.2022
  *
  */
+-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mixelblocks DiscordBot ReCaptcha</title>
 
-const Discord = moduleRequire('discord.js');
-const uuidv4 = moduleRequire('uuid').v4;
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
-module.exports = async (bot, member) => {
-    if (member.guild.id != bot.configs.general.guild_id) return;
-    try {
-        if (member.partial) member = await member.fetch();
-    } catch (error) {
-        bot.catch(error);
-    }
+        <!-- Google ReCaptcha -->
+        <script defer src="https://www.google.com/recaptcha/api.js"></script>
 
-    var trustScore = await bot.tools.discord.calculateTrustScore(bot, member);
-    var trustScoreAsNumber = 0 + trustScore[0];
-
-    bot.send({ channel: await bot.channels.fetch(bot.configs.general.channels.trust_log) }, `Der TrustScore von ${member.user.username} beträgt **${trustScore[0]} Punkte**.\n**Berechnung:**\n\`\`\`diff\n${trustScore[1].sort().join('\n')}\n\`\`\``);
-
-    if (trustScoreAsNumber < 100) {
-        var uuid = uuidv4();
-        var url = `https://bot.mixelblocks.de/captcha/${uuid}`;
-
-        bot.verifyIdentifiers[uuid] = {
-            id: member.id,
-            url: url,
-            uuid: uuid,
-        };
-        bot.sendUsage(member.user, 'Du scheinst ein Bot zu sein!', `Vor der Nutzung unseres Servers musst du ein Captcha lösen!\n[**Klicke dafür Hier**](${url})`, (msg) => {
-            if (!msg) {
-                bot.channels.fetch(bot.configs.general.channels.welcome_channel).then((channel) => {
-                    bot.sendUsage(channel, `Du scheinst ein Bot zu sein!`, `<@${member.id}> Bitte aktiviere deine DM's und gebe per DM den Command \`/captcha\` ein um dich zu verifizieren.`);
-                });
-            }
-        });
-    } else member.roles.add(bot.configs.general.verified_role);
-};
+        <!-- Internal -->
+        <link rel="stylesheet" href="/static/styles/main.css" />
+        <script defer src="/static/scripts/main.js"></script>
+    </head>
+    <body class="noselect">
+        <div class="background">
+            <img src="/static/banner.png" alt="BackGroundImage" class="bg-image" />
+        </div>
+        <div class="content-darker textselect">
+            <center>
+                <% if(!verified) { %>
+                <form id="captchaForm" method="POST">
+                    <div id="captcha" class="g-recaptcha" data-sitekey="<%= captchaKey %>"></div>
+                    <input id="captcha-response" name="captcha-response" style="display: none" type="text" />
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+                <% } else { %>
+                <h1 class="verified">Du bist jetzt verifiziert und kannst alles auf dem Discordserver machen.</h1>
+                <% } %>
+            </center>
+        </div>
+    </body>
+</html>

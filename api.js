@@ -40,6 +40,8 @@
 
 module.exports = () => null;
 
+const RECAPTCHA_BASE_URL = `https://www.google.com/recaptcha/api/siteverify?secret=`;
+
 module.exports.listen = async (bot, port) => {
     var express = moduleRequire('express');
     var ejs = moduleRequire('ejs');
@@ -115,6 +117,33 @@ module.exports.listen = async (bot, port) => {
 
     app.get('/', async (req, res) => {
         return res.status(200).render('index', { bot: bot });
+    });
+
+    app.get('/captcha/:identifier', async (req, res) => {
+        var identifier = req.params.identifier;
+        if (!bot.verifyIdentifiers[identifier])
+            return res.status(404).json({
+                error: true,
+                message: 'That endpoint does not exist.',
+            });
+        return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, verified: false, identifier: identifier });
+    });
+
+    app.post('/captcha/:identifier', async (req, res) => {
+        var identifier = req.params.identifier;
+        if (!bot.verifyIdentifiers[identifier])
+            return res.status(404).json({
+                error: true,
+                message: 'That endpoint does not exist.',
+            });
+        var verified = false;
+        fetch(RECAPTCHA_BASE_URL + process.env.RECAPTCHA_SERVER + '&response=' + req.body['g-recaptcha-response'])
+            .then((response) => response.json())
+            .then((data) => {
+                verified = data.success;
+                bot.verify(identifier);
+                return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, verified: verified, identifier: identifier });
+            });
     });
 
     app.get('/visitsGuild/:userid', async (req, res) => {

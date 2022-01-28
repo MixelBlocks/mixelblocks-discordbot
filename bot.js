@@ -54,7 +54,7 @@ const bot = new Client({
 
 const cachePath = process.cwd() + '/cache.json';
 if (!fs.existsSync(cachePath)) {
-    fs.writeFileSync(cachePath, JSON.stringify({ afkCache: {}, commandStats: {}, bump: {} }));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: {} }));
 }
 
 // enable logging
@@ -84,14 +84,14 @@ bot.send = async (message, text, callback = () => {}) => {
     let replyEmbed = new MessageEmbed();
     replyEmbed.setDescription(text);
     replyEmbed.setColor('#226EB3');
-    callback(await message.channel.send({ embeds: [replyEmbed] }));
+    callback(await message.channel.send({ embeds: [replyEmbed] }).catch((err) => {}));
 };
 
 bot.reply = async (message, text, callback = () => {}) => {
     let replyEmbed = new MessageEmbed();
     replyEmbed.setDescription(text);
     replyEmbed.setColor('#226EB3');
-    callback(await message.reply({ embeds: [replyEmbed] }));
+    callback(await message.reply({ embeds: [replyEmbed] }).catch((err) => {}));
 };
 
 bot.usage = async (message, title, usage, callback = () => {}) => {
@@ -102,7 +102,18 @@ bot.usage = async (message, title, usage, callback = () => {}) => {
     });
     replyEmbed.setDescription(usage);
     replyEmbed.setColor('#226EB3');
-    callback(await message.reply({ embeds: [replyEmbed] }));
+    callback(await message.reply({ embeds: [replyEmbed] }).catch((err) => {}));
+};
+
+bot.sendUsage = async (channel, title, usage, callback = () => {}) => {
+    let replyEmbed = new MessageEmbed();
+    replyEmbed.setAuthor({
+        name: title,
+        iconURL: 'https://cdn.discordapp.com/emojis/874241155804594227.png',
+    });
+    replyEmbed.setDescription(usage);
+    replyEmbed.setColor('#226EB3');
+    callback(await channel.send({ embeds: [replyEmbed] }).catch((err) => {}));
 };
 
 // module caching
@@ -124,6 +135,24 @@ bot.ignoredPath = process.cwd() + '/ignore_watch/';
 bot.commands = new Enmap();
 bot.interactions = new Enmap();
 bot.slash_commands = new Enmap();
+
+var cacheJSON = require(cachePath);
+bot.verifyIdentifiers = cacheJSON.verifyUsers || {};
+
+bot.verify = async (identifier) => {
+    return new Promise((resolve, reject) => {
+        var userThing = bot.verifyIdentifiers[identifier];
+        bot.guilds.cache
+            .get(bot.configs.general.guild_id)
+            .members.fetch(userThing.id)
+            .then((member) => {
+                member.roles.add(bot.configs.general.verified_role);
+
+                delete bot.verifyIdentifiers[identifier];
+            });
+        resolve(true);
+    });
+};
 
 fs.readdir('./configs/', (error, files) => {
     if (error) throw error;
@@ -257,17 +286,17 @@ bot.memberCount = () => bot.guilds.cache.get(bot.configs.general.guild_id).membe
 bot.logger.emergency('Initialized cache save methods on SIGINT, SIGTERM and process.exit ... This may take a few seconds on each restart.');
 process.on('SIGINT', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({}));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
     bot.logger.emergency('Have a great day :D');
 });
 process.on('SIGTERM', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({}));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
     bot.logger.emergency('Have a great day :D');
 });
 process.on('exit', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({}));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
     bot.logger.emergency('Have a great day :D');
 });
 

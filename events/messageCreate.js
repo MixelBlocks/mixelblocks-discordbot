@@ -49,7 +49,26 @@ var messageTriple = {};
 module.exports = async (bot, message) => {
     // dont react to bots and dms
     if (message.author.bot) return;
-    if (message.channel.type == 'dm') return;
+    if (message.channel.type == 'DM') {
+        const args = message.content.trim().split(/ +/g);
+        let dmCommand = args[0];
+        if (!dmCommand) dmCommand = '';
+        switch (dmCommand.toLowerCase()) {
+            case '/captcha': {
+                let verifyObject = null;
+                Object.keys(bot.verifyIdentifiers).forEach((key) => {
+                    if (bot.verifyIdentifiers[key].id == message.author.id) verifyObject = bot.verifyIdentifiers[key];
+                });
+                if (verifyObject) {
+                    bot.usage(message, 'Du scheinst ein Bot zu sein!', `Vor der Nutzung unseres Servers musst du ein Captcha lösen!\n[**Klicke dafür Hier**](${verifyObject.url})`);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        return;
+    }
 
     // dont react to empty messages
     if (!message.content) return;

@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
 module.exports.active = true;
 module.exports.similarityCheck = false;
 
-module.exports.aliases = ['run'];
+module.exports.aliases = ['rs'];
 
 module.exports.help = {
     name: 'eval',
