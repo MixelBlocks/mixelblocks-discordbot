@@ -1,4 +1,4 @@
-# MixelBlcoks Discord Bot
+# MixelBlocks Discord Bot
 
 ---
 
