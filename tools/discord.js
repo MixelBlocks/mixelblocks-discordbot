@@ -147,9 +147,15 @@ module.exports.sendEmbed = async (channel, data, cb) => {
             else embed.setColor(15007859);
             if (data.author) {
                 if (typeof data.author == 'object') {
-                    embed.setAuthor(data.author.text || data.author.name, data.author.image || data.author.image_url || data.author.url || data.author.icon_url);
+                    embed.setAuthor({
+                        name: data.author.text || data.author.name,
+                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        url: data.author.url,
+                    });
                 } else {
-                    embed.setAuthor(data.author);
+                    embed.setAuthor({
+                        name: data.author,
+                    });
                 }
             }
             if (data.thumbnail) {
@@ -222,9 +228,15 @@ module.exports.replyEmbed = async (message, data, cb) => {
             else embed.setColor(15007859);
             if (data.author) {
                 if (typeof data.author == 'object') {
-                    embed.setAuthor(data.author.text || data.author.name, data.author.image || data.author.image_url || data.author.url || data.author.icon_url);
+                    embed.setAuthor({
+                        name: data.author.text || data.author.name,
+                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        url: data.author.url,
+                    });
                 } else {
-                    embed.setAuthor(data.author);
+                    embed.setAuthor({
+                        name: data.author,
+                    });
                 }
             }
             if (data.thumbnail) {
@@ -297,9 +309,15 @@ module.exports.generateEmbed = async (data, cb) => {
             else embed.setColor(15007859);
             if (data.author) {
                 if (typeof data.author == 'object') {
-                    embed.setAuthor(data.author.text || data.author.name, data.author.image || data.author.image_url || data.author.url || data.author.icon_url);
+                    embed.setAuthor({
+                        name: data.author.text || data.author.name,
+                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        url: data.author.url,
+                    });
                 } else {
-                    embed.setAuthor(data.author);
+                    embed.setAuthor({
+                        name: data.author,
+                    });
                 }
             }
             if (data.thumbnail) {

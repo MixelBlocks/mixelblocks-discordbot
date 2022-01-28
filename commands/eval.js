@@ -25,4 +25,13 @@ module.exports.run = async (bot, message, label, args, prefix) => {
 module.exports.active = true;
 module.exports.similarityCheck = false;
 
-module.exports.aliases = [];
+module.exports.aliases = ['run'];
+
+module.exports.help = {
+    name: 'eval',
+    category: 'devtools',
+    aliases: this.aliases,
+    active: this.active,
+    description: 'Dieser Command erlaubt Serverseitig ausgeführten JavaScript code.',
+    usage: '{prefix}{name} <args>',
+};

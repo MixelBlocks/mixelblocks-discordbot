@@ -63,3 +63,12 @@ module.exports.active = true;
 module.exports.similarityCheck = false;
 
 module.exports.aliases = [];
+
+module.exports.help = {
+    name: 'command_template',
+    category: 'tools',
+    aliases: this.aliases,
+    active: this.active,
+    description: 'Dies ist ein toller Command für dich.',
+    usage: '{prefix}{name} <args>',
+};

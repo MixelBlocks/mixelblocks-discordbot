@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
 
             switch (used.type) {
                 case 'snipe':
-                    const embed = new MessageEmbed().setAuthor(snipe.author.tag).setColor('#e50073').setTimestamp(snipe.createdAt);
+                    const embed = new MessageEmbed().setAuthor({ name: snipe.author.tag }).setColor('#e50073').setTimestamp(snipe.createdAt);
                     snipe.content ? embed.setDescription(snipe.content) : null;
                     snipe.image ? embed.setImage(snipe.image) : null;
 
@@ -91,7 +91,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
                     await message.reply(
                         snipeEdit
                             ? {
-                                  embeds: [new MessageEmbed().setDescription(snipeEdit.content).setAuthor(snipeEdit.author.tag).setTimestamp(snipeEdit.createdAt).setColor('#e50073')],
+                                  embeds: [new MessageEmbed().setDescription(snipeEdit.content).setAuthor({ name: snipeEdit.author.tag }).setTimestamp(snipeEdit.createdAt).setColor('#e50073')],
                               }
                             : 'Es gibt nichts zu snipen!'
                     );
@@ -103,7 +103,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
                                   embeds: [
                                       new MessageEmbed()
                                           .setDescription(`hat mit ${bot.sniper.formatEmoji(snipeReact.emoji)} auf [diese Nachricht](${snipeReact.messageURL}) reagiert.`)
-                                          .setAuthor(snipeReact.user.tag)
+                                          .setAuthor({ name: snipeReact.user.tag })
                                           .setColor('#e50073')
                                           .setTimestamp(snipeReact.createdAt),
                                   ],
@@ -136,3 +136,12 @@ module.exports.active = true;
 module.exports.similarityCheck = false;
 
 module.exports.aliases = ['snipe'];
+
+module.exports.help = {
+    name: 'sniper',
+    category: 'premium',
+    aliases: this.aliases,
+    active: this.active,
+    description: 'Dieser Command lässt dich die letzte gelöschte Nachricht/Reaktion/Bearbeitung sehen.',
+    usage: '{prefix}{name}',
+};
