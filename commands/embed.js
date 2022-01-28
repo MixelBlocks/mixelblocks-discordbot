@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
                     if (args[0] == '```') args.shift();
                     if (args[args.length - 1] == '```') args.pop();
                     let embedData = args.join(' ');
-                    if (bot.jstools.isUrl(args[0])) {
+                    if (bot.tools.js.isUrl(args[0])) {
                         await fetch(args[0])
                             .then((r) => r.text())
                             .then((t) => {
