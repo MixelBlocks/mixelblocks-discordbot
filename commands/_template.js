@@ -39,7 +39,7 @@
  */
 
 module.exports.run = async (bot, message, label, args, prefix) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const Discord = moduleRequire('discord.js');
         try {
         } catch (error) {

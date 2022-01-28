@@ -132,6 +132,9 @@ for (let modulename of mods.list) {
 require('./modules/database').setupDatabaseHandler(bot);
 // require tools
 bot.tools = moduleRequire('./tools');
+// require sniper function
+bot.sniper = {};
+require('./modules/sniper')(bot);
 
 // load bot events
 fs.readdir('./events/', (error, files) => {

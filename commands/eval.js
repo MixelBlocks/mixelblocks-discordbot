@@ -1,7 +1,7 @@
 module.exports.run = async (bot, message, label, args, prefix) => {
     const Discord = moduleRequire('discord.js');
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             if (message.author.id != '427212136134213644') return resolve(false);
             eval(args.join(' '));
