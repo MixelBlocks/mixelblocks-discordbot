@@ -42,5 +42,21 @@ const ts = moduleRequire('time-stamp');
 const Discord = moduleRequire('discord.js');
 
 module.exports = async (bot) => {
+    // Fetch some channels and the main guild
+    await bot.guilds.fetch(bot.configs.general.guild_id).then(async (guild) => {
+        bot.logChannel = await guild.channels.fetch(bot.configs.general.channels.bot_log).catch(bot.catch);
+        bot.errorChannel = await guild.channels.fetch(bot.configs.general.channels.error_log).catch(bot.catch);
+    });
+
+    // update random status
+    bot.tools.discord.updateStatus(bot);
+    setInterval(() => {
+        bot.tools.discord.updateStatus(bot);
+    }, 120000);
+
+    // start api when everything is loaded
+    var webserver = require('../api');
+    webserver.listen(bot, process.env.API_PORT);
+
     bot.logger.log('[LOGIN SUCCESSFUL] » Bot logged in successful without problems «');
 };

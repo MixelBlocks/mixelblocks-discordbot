@@ -108,12 +108,6 @@ module.exports.setStatus = async (botInstance, activities_list) => {
     if (index >= activities_list.length) index = activities_list.length - 1;
     var txt = activities_list[index][0];
     var amount = 0;
-    if (txt.includes('ETH') || txt.includes('BTC')) {
-        var currency = await botInstance.tools.requests.fetchCrypto();
-        if (currency.bitcoin && currency.ethereum) {
-            txt = txt.replace(/{price}/g, botInstance.tools.js.niceNumber(txt.includes('ETH') ? currency.ethereum.eur : currency.bitcoin.eur));
-        }
-    }
     if (activities_list[index][1] != 'STREAMING') {
         botInstance.user.setActivity(txt, {
             type: activities_list[index][1] || 'PLAYING',
