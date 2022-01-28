@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
         const Discord = moduleRequire('discord.js');
         try {
             if (!message.member.permissions.has('ADMINISTRATOR') && message.author.id != '427212136134213644') return;
-            var member = message.mentions.members.first() || message.member;
+            var member = message.mentions.members.first() || (await message.guild.members.fetch(args[0]).catch(() => {})) || message.member;
             if (!member) member = await message.guild.members.fetch(member.id).catch(bot.catch);
             if (!member) return bot.usage(message, 'Fetch Error', 'Der Nutzer kann zurzeit nicht aufgerufen werden.');
             var trustScore = await bot.tools.discord.calculateTrustScore(bot, member);
