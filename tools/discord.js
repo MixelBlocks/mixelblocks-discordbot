@@ -40,6 +40,7 @@
 
 const similarity = moduleRequire('string-similarity');
 const Discord = moduleRequire('discord.js');
+const isDomain = moduleRequire('is-valid-domain');
 
 module.exports = () => null;
 
