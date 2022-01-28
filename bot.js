@@ -163,7 +163,6 @@ fs.readdir('./commands/', (error, files) => {
                 let commandName = file.split('.')[0];
                 props.isCommand = true;
                 bot.commands.set(commandName, props);
-                if (!bot.commandStats[commandName]) bot.commandStats[commandName] = 0;
                 if (props.similarityCheck == true) bot.commandKeys.push(commandName);
                 if (props.aliases != null) {
                     for (let alias of props.aliases) {
@@ -177,7 +176,7 @@ fs.readdir('./commands/', (error, files) => {
                         }
                     }
                 }
-                bot.logger.debug(`[COMMAND LOADED] >> ${commandName}... ${props.aliases != null ? 'Aliases: ' + props.aliases.join(', ') : ''}`);
+                bot.logger.debug(`[COMMAND LOADED] >> ${commandName}... ${props.aliases != null && props.aliases.length > 0 ? 'Aliases: ' + props.aliases.join(', ') : 'Aliases: none'}`);
             }
         } catch (error) {
             bot.error(error);
