@@ -40,4 +40,20 @@
 
 const Discord = moduleRequire('discord.js');
 
-module.exports = async (bot, member) => {};
+module.exports = async (bot, member) => {
+    if (member.guild.id != bot.configs.general.guild_id) return;
+    try {
+        if (member.partial) member = await member.fetch();
+    } catch (error) {
+        bot.catch(error);
+    }
+
+    var trustScore = await bot.tools.discord.calculateTrustScore(bot, member);
+    var trustScoreAsNumber = 0 + trustScore[0];
+
+    bot.send({ channel: await bot.channels.fetch(bot.configs.general.channels.trust_log) }, `Der TrustScore von ${member.user.username} beträgt **${trustScore[0]} Punkte**.\n**Berechnung:**\n\`\`\`diff\n${trustScore[1].sort().join('\n')}\n\`\`\``);
+
+    if (trustScoreAsNumber < 100) {
+        // TODO let the member verify himself via reCaptcha
+    }
+};

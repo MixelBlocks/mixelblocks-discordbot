@@ -149,7 +149,7 @@ module.exports.sendEmbed = async (channel, data, cb) => {
                 if (typeof data.author == 'object') {
                     embed.setAuthor({
                         name: data.author.text || data.author.name,
-                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        iconURL: data.author.image || data.author.image_url || data.author.icon_url,
                         url: data.author.url,
                     });
                 } else {
@@ -230,7 +230,7 @@ module.exports.replyEmbed = async (message, data, cb) => {
                 if (typeof data.author == 'object') {
                     embed.setAuthor({
                         name: data.author.text || data.author.name,
-                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        iconURL: data.author.image || data.author.image_url || data.author.icon_url,
                         url: data.author.url,
                     });
                 } else {
@@ -311,7 +311,7 @@ module.exports.generateEmbed = async (data, cb) => {
                 if (typeof data.author == 'object') {
                     embed.setAuthor({
                         name: data.author.text || data.author.name,
-                        icon_url: data.author.image || data.author.image_url || data.author.icon_url,
+                        iconURL: data.author.image || data.author.image_url || data.author.icon_url,
                         url: data.author.url,
                     });
                 } else {

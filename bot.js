@@ -43,7 +43,7 @@ require('dotenv').config();
 const fs = require('fs');
 
 // import modules
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, MessageEmbed } = require('discord.js');
 const Enmap = require('enmap');
 
 // create the Discord Client
@@ -78,6 +78,31 @@ bot.catch = async (error, channel) => {
     bot.error(error);
     if (channel) {
     }
+};
+
+bot.send = async (message, text, callback = () => {}) => {
+    let replyEmbed = new MessageEmbed();
+    replyEmbed.setDescription(text);
+    replyEmbed.setColor('#226EB3');
+    callback(await message.channel.send({ embeds: [replyEmbed] }));
+};
+
+bot.reply = async (message, text, callback = () => {}) => {
+    let replyEmbed = new MessageEmbed();
+    replyEmbed.setDescription(text);
+    replyEmbed.setColor('#226EB3');
+    callback(await message.reply({ embeds: [replyEmbed] }));
+};
+
+bot.usage = async (message, title, usage, callback = () => {}) => {
+    let replyEmbed = new MessageEmbed();
+    replyEmbed.setAuthor({
+        name: title,
+        iconURL: 'https://cdn.discordapp.com/emojis/874241155804594227.png',
+    });
+    replyEmbed.setDescription(usage);
+    replyEmbed.setColor('#226EB3');
+    callback(await message.reply({ embeds: [replyEmbed] }));
 };
 
 // module caching
