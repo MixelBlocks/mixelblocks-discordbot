@@ -1,0 +1,43 @@
+{
+    "name": "mixelblocks-discordbot",
+    "version": "0.0.1",
+    "description": "",
+    "main": "bot.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/MixelBlocks/mixelblocks-discordbot.git"
+    },
+    "keywords": [
+        "mixelblocks.de",
+        "discorbot",
+        "discord",
+        "bot"
+    ],
+    "author": "LuciferMorningstarDev",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/MixelBlocks/mixelblocks-discordbot/issues"
+    },
+    "homepage": "https://github.com/MixelBlocks/mixelblocks-discordbot#readme",
+    "dependencies": {
+        "@discordjs/rest": "^0.3.0",
+        "async": "^3.2.3",
+        "discord.js": "^13.6.0",
+        "dotenv": "^14.3.2",
+        "ejs": "^3.1.6",
+        "enmap": "^5.8.7",
+        "express": "^4.17.2",
+        "express-rate-limit": "^6.2.0",
+        "fs": "^0.0.1-security",
+        "http": "^0.0.1-security",
+        "mongodb": "^4.3.1",
+        "node-fetch": "^3.2.0",
+        "string-similarity": "^4.0.4",
+        "time-stamp": "^2.2.0",
+        "uuid": "^8.3.2",
+        "validator": "^13.7.0"
+    }
+}
