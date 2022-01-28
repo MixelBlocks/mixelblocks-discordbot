@@ -111,8 +111,8 @@ module.exports = async (bot, message) => {
     // anti commandspam
     var ts = Date.now();
     if (commandLastPost[message.author.id] != null) {
-        if (ts - commandLastPost[message.author.id] < 1000) {
-            return message.reply(':x: Bitte kein Command Spam! :x:');
+        if (ts - commandLastPost[message.author.id] < 3000) {
+            if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply(':x: Bitte kein Command Spam! :x:');
         }
     }
     commandLastPost[message.author.id] = ts;
