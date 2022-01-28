@@ -53,13 +53,15 @@ Benutzung: ${prefix + label} <name | uuid >
                 return resolve(false);
             }
 
+            var name = args[0];
+
             bot.tools.discord.sendEmbed(message.channel, {
-                title: `Hier ist der Skin von: **${args[0]}**`,
-                thumbnail: `https://mc-heads.net/avatar/${args[0]}`,
-                image: `https://mc-heads.net/body/${args[0]}/right`,
+                title: `Hier ist der Skin von: **${name.replace('_', '\\_')}**`,
+                thumbnail: `https://mc-heads.net/avatar/${name}`,
+                image: `https://mc-heads.net/body/${name}/right`,
                 description: `
-[Download](https://mc-heads.net/download/${args[0]})
-[Ansehen](https://mc-heads.net/skin/${args[0]})      
+[Download](https://mc-heads.net/download/${name})
+[Ansehen](https://mc-heads.net/skin/${name})      
                 `,
             });
         } catch (error) {
