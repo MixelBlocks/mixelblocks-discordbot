@@ -7,9 +7,16 @@ module.exports.run = async (bot, message, label, args, prefix) => {
                 bot.usage(message, 'Permission Error', 'Du kannst den bot nicht neu starten!');
                 return resolve(false);
             }
-            bot.reply(message, 'Bot restarting...', (sent) => {
-                process.exit();
-            });
+            if (!bot.restart) {
+                bot.reply(message, 'The Bot will restart in 10 seconds...', (sent) => {
+                    bot.restart = Date.now() + 10000;
+                    setTimeout(() => {
+                        process.exit();
+                    }, 10000);
+                });
+            } else {
+                bot.usage(message, 'Restart in progress...', `Der bot startet in **${(bot.restart - Date.now()) / 1000}** Sekunden neu.`);
+            }
         } catch (error) {
             bot.error('Error in CommandName Command.', error);
             try {
