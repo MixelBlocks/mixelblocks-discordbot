@@ -252,6 +252,8 @@ fs.readdir('./slash_commands/', (error, files) => {
     });
 });
 
+bot.memberCount = () => bot.guilds.cache.get(bot.configs.general.guild_id).memberCount;
+
 bot.logger.emergency('Initialized cache save methods on SIGINT, SIGTERM and process.exit ... This may take a few seconds on each restart.');
 process.on('SIGINT', () => {
     bot.logger.info('Saving cache to ' + cachePath);

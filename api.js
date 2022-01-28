@@ -83,7 +83,7 @@ module.exports.listen = async (bot, port) => {
         });
     };
 
-    const defPath = process.cwd().endsWith('/') ? process.cwd() + 'htdocs/' : process.cwd() + '/' + 'htdocs/';
+    const defPath = process.cwd().endsWith('/') ? process.cwd() : process.cwd() + '/';
     const viewsPath = defPath + 'views/';
     const publicPath = defPath + 'public/';
 
@@ -113,7 +113,53 @@ module.exports.listen = async (bot, port) => {
         next();
     });
 
-    app.get('*', async (req, res, next) => {
+    app.get('/', async (req, res) => {
+        return res.status(200).render('index', { bot: bot });
+    });
+
+    app.get('/visitsGuild/:userid', async (req, res) => {
+        return res.redirect(req.path + '/' + bot.configs.general.guild_id);
+    });
+
+    app.get('/visitsGuild/:userid/:guildid', async (req, res) => {
+        if (!req.params.userid)
+            return res.status(500).json({
+                error: true,
+                message: 'noUserIdSpecified',
+            });
+
+        if (!req.params.guildid)
+            return res.status(500).json({
+                error: true,
+                message: 'noGuildIdSpecified',
+            });
+
+        var guild = await bot.guilds.fetch(req.params.guildid).catch((err = {}));
+        var member;
+        try {
+            member = await guild.members.fetch(req.params.userid).catch((err = {}));
+        } catch (error) {}
+
+        if (!guild)
+            return res.status(500).json({
+                error: true,
+                message: 'unKnownGuild',
+            });
+
+        if (!member)
+            return res.status(200).json({
+                error: false,
+                visit: false,
+            });
+
+        return res.status(200).json({
+            error: false,
+            visit: true,
+        });
+    });
+
+    // 404 handle
+    app.get('*', async (req, res) => {
         return res.status(404).json({
             error: true,
             message: 'That endpoint does not exist.',
