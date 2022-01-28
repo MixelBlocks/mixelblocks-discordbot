@@ -68,4 +68,12 @@ module.exports.setupDatabaseHandler = (bot) => {
     bot.db.updateAsync = async (collection, searchQuery, object) => databaseHandler.updateObject(process.env.DATABASE_NAME, collection, searchQuery, object);
 
     bot.db.deleteAsync = async (collection, searchQuery) => databaseHandler.deleteObject(process.env.DATABASE_NAME, collection, searchQuery);
+
+    bot.db.rawQueryAsync = async (database, collection, searchQuery) => databaseHandler.queryAsync(database, collection, searchQuery);
+
+    bot.db.rawInsertAsync = async (database, collection, object) => databaseHandler.insertObject(database, collection, object);
+
+    bot.db.rawUpdateAsync = async (database, collection, searchQuery, object) => databaseHandler.updateObject(database, collection, searchQuery, object);
+
+    bot.db.rawDeleteAsync = async (database, collection, searchQuery) => databaseHandler.deleteObject(database, collection, searchQuery);
 };
