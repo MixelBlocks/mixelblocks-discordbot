@@ -11,6 +11,10 @@ module.exports.run = async (bot, message, label, args, prefix) => {
                 bot.reply(message, 'The Bot will restart in 10 seconds...', (sent) => {
                     bot.restart = Date.now() + 10000;
                     setTimeout(() => {
+                        bot.restartCommandUsed = {
+                            when: Date.now(),
+                            channel: message.channel.id,
+                        };
                         process.exit();
                     }, 10000);
                 });

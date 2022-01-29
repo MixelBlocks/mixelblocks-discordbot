@@ -138,6 +138,7 @@ bot.slash_commands = new Enmap();
 
 var cacheJSON = require(cachePath);
 bot.verifyIdentifiers = cacheJSON.verifyUsers || {};
+bot.restartCommandUsed = cacheJSON.restartCommandUsed || {};
 
 bot.verify = async (identifier) => {
     return new Promise((resolve, reject) => {
@@ -286,17 +287,17 @@ bot.memberCount = () => bot.guilds.cache.get(bot.configs.general.guild_id).membe
 bot.logger.emergency('Initialized cache save methods on SIGINT, SIGTERM and process.exit ... This may take a few seconds on each restart.');
 process.on('SIGINT', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers, restartCommandUsed: bot.restartCommandUsed }));
     bot.logger.emergency('Have a great day :D');
 });
 process.on('SIGTERM', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers, restartCommandUsed: bot.restartCommandUsed }));
     bot.logger.emergency('Have a great day :D');
 });
 process.on('exit', () => {
     bot.logger.info('Saving cache to ' + cachePath);
-    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers }));
+    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: bot.verifyIdentifiers, restartCommandUsed: bot.restartCommandUsed }));
     bot.logger.emergency('Have a great day :D');
 });
 

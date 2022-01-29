@@ -58,5 +58,12 @@ module.exports = async (bot) => {
     var webserver = require('../api');
     webserver.listen(bot, process.env.API_PORT);
 
+    if (Date.now() - bot.restartCommandUsed?.when < 5000) {
+        var restartedChannel = bot.restartCommandUsed?.channel;
+        bot.channels.fetch(restartedChannel).then((ch) => {
+            bot.send({ channel: ch }, '[RESTART SUCCESSFUL] » Bot logged in successful without problems «');
+        });
+    }
+
     bot.logger.log('[LOGIN SUCCESSFUL] » Bot logged in successful without problems «');
 };
