@@ -67,7 +67,7 @@ module.exports.run = async (bot, interaction) => {
         switch (subCommand) {
             case 'name': {
                 currentChannel.edit({
-                    name: interaction.options.getString('name'),
+                    name: interaction.options.getString('name').slice(0, 20),
                 });
                 return interaction.reply({ content: 'Der name des Kanals wurde auf `' + interaction.options.getString('name') + '` gesetzt.', ephemeral: true });
             }
