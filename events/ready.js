@@ -41,6 +41,8 @@
 const ts = moduleRequire('time-stamp');
 const Discord = moduleRequire('discord.js');
 
+const { Routes } = moduleRequire('discord-api-types/v9');
+
 module.exports = async (bot) => {
     // Fetch some channels and the main guild
     await bot.guilds.fetch(bot.configs.general.guild_id).then(async (guild) => {
@@ -64,6 +66,18 @@ module.exports = async (bot) => {
             bot.send({ channel: ch }, '[RESTART SUCCESSFUL] » Bot logged in successful without problems «');
         });
     }
+
+    (async () => {
+        try {
+            bot.logger.log('Started refreshing application (/) commands.');
+            var slashCommands = [];
+            for (let slash_command of bot.slash_commands.array()) slashCommands.push(slash_command.data.toJSON());
+            await bot.restClient.put(Routes.applicationGuildCommands(bot.user.id, bot.configs.general.guild_id), { body: slashCommands });
+            bot.logger.log('Successfully reloaded application (/) commands.');
+        } catch (error) {
+            bot.logger.error(error);
+        }
+    })();
 
     bot.logger.log('[LOGIN SUCCESSFUL] » Bot logged in successful without problems «');
 };

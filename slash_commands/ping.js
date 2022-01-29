@@ -38,27 +38,18 @@
  *
  */
 
-const Discord = moduleRequire('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
-module.exports = async (bot, interaction) => {
-    if (interaction.isCommand()) {
-        var commandName = interaction.commandName;
-        var command = bot.slash_commands.get(commandName);
-        if (!command) return;
-        try {
-            command.run(bot, interaction);
-        } catch (err) {
-            bot.error('Unhandled Error in SlashCommand', err);
-        }
-        return;
-    } else {
-        if (!interaction.customId) return;
-        var command = bot.interactions.get(interaction.customId);
-        if (!command) return;
-        try {
-            cmd.run(bot, interaction);
-        } catch (err) {
-            bot.error('Unhandled Error in Interaction with CustomID', err);
-        }
+module.exports.run = async (bot, interaction) => {
+    const Discord = moduleRequire('discord.js');
+
+    try {
+        interaction.reply({ content: 'Pong!', ephemeral: true });
+    } catch (errpr) {
+        bot.error('Error in Slash Command Ping', error);
     }
 };
+
+module.exports.data = new SlashCommandBuilder().setName('ping').setDescription('This is just a simple ping command!');
+
+module.exports.active = true;

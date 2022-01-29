@@ -37,3 +37,16 @@
  * @since 28.01.2022
  *
  */
+
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+module.exports.run = async (bot, interaction) => {
+    const Discord = moduleRequire('discord.js');
+
+    try {
+    } catch (errpr) {
+        bot.error('Error in Slash Command CommandName', error);
+    }
+};
+
+module.exports.data = new SlashCommandBuilder().setName('template').setDescription('this is a template command');

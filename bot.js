@@ -44,6 +44,7 @@ const fs = require('fs');
 
 // import modules
 const { Client, Intents, MessageEmbed } = require('discord.js');
+const { REST } = require('@discordjs/rest');
 const Enmap = require('enmap');
 
 // create the Discord Client
@@ -301,4 +302,7 @@ process.on('exit', () => {
     bot.logger.emergency('Have a great day :D');
 });
 
+// slash commands
+
+bot.restClient = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 bot.login(process.env.BOT_TOKEN);
