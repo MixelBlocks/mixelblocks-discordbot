@@ -121,28 +121,20 @@ module.exports.listen = async (bot, port) => {
 
     app.get('/captcha/:identifier', async (req, res) => {
         var identifier = req.params.identifier;
-        if (!bot.verifyIdentifiers[identifier])
-            return res.status(404).json({
-                error: true,
-                message: 'That endpoint does not exist.',
-            });
-        return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, verified: false, identifier: identifier });
+        var renderForm = bot.verifyIdentifiers[identifier] != null;
+        return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, renderForm: renderForm, verified: false, identifier: identifier });
     });
 
     app.post('/captcha/:identifier', async (req, res) => {
         var identifier = req.params.identifier;
-        if (!bot.verifyIdentifiers[identifier])
-            return res.status(404).json({
-                error: true,
-                message: 'That endpoint does not exist.',
-            });
+        var renderForm = bot.verifyIdentifiers[identifier] != null;
         var verified = false;
         fetch(RECAPTCHA_BASE_URL + process.env.RECAPTCHA_SERVER + '&response=' + req.body['g-recaptcha-response'])
             .then((response) => response.json())
             .then((data) => {
                 verified = data.success;
                 bot.verify(identifier);
-                return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, verified: verified, identifier: identifier });
+                return res.status(200).render('captcha', { bot: bot, captchaKey: process.env.RECAPTHCA_PUBLIC, renderForm: renderForm, verified: verified, identifier: identifier });
             });
     });
 

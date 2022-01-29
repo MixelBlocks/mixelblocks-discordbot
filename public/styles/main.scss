@@ -87,31 +87,9 @@ body {
     width: 100vw;
     min-height: 100vh;
     overflow-x: hidden;
-}
-
-.background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    width: 100vw;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    .bg-image {
-        width: 100vw;
-    }
-}
-
-.content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 80vh;
-    width: 80vw;
-    background: #00000045;
-    transform: translate(-50%, -50%);
 }
 
 /* defaults */

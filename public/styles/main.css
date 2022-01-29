@@ -90,15 +90,6 @@ body {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-.background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -108,32 +99,6 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-}
-
-.background .bg-image {
-  width: 100vw;
-}
-
-.content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 80vh;
-  width: 80vw;
-  background: #00000045;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-
-.content-darker {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 80vh;
-  width: 80vw;
-  background: #00000099;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
 }
 
 /* defaults */
