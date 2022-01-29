@@ -171,19 +171,6 @@ fs.readdir('./configs/', (error, files) => {
     });
 });
 
-const mods = require('./modules.json');
-// cache globally used modules
-for (let modulename of mods.list) {
-    try {
-        let name = modulename;
-        if (modulename.startsWith('./')) name = modulename.split('/')[modulename.split('/').length - 1];
-        bot.modules[name] = require(modulename);
-        bot.logger.debug('[CACHE MODULE LOADED] » ' + name);
-    } catch (error) {
-        bot.error(error);
-    }
-}
-
 // init mongodb or json
 require('./modules/database').setupDatabaseHandler(bot);
 // require tools

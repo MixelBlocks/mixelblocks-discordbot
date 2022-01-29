@@ -1,3 +1,0 @@
-{
-    "list": ["discord.js", "@discordjs/rest", "express", "uuid", "validator", "express-rate-limit", "time-stamp", "fs", "string-similarity", "./modules/logger", "./modules/mongo-driver"]
-}
