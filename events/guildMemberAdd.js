@@ -49,6 +49,26 @@ module.exports = async (bot, member) => {
         bot.catch(error);
     }
 
+    var index = Math.floor(Math.random() * bot.configs.welcome.messages.length);
+    if (index < 0) index = 0;
+    if (index >= activities_list.length) index = bot.configs.welcome.messages.length - 1;
+
+    let message = bot.configs.welcome.messages[index]
+        .replace(/{user}/g, `<@${member.id}>`)
+        .replace(/{username}/g, member.user.username)
+        .replace(/{member_count}/g, member.guild.memberCount)
+        .replace(/{server_name}/g, member.guild.name)
+        .replace(/{rules_channel}/g, `<#914812681754652672>`);
+
+    var embed = bot.tools.discord.generateEmbed({
+        title: 'Jemand neues ist angekommen :)',
+        description: message,
+        color: '#00EE00',
+    });
+    member.guild.channels.fetch(bot.configs.welcome.channel).then((channel) => {
+        channel.send('<@' + member.id + '>', { embeds: [embed] });
+    });
+
     var trustScore = await bot.tools.discord.calculateTrustScore(bot, member);
     var trustScoreAsNumber = 0 + trustScore[0];
 
