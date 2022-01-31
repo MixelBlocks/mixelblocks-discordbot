@@ -42,7 +42,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
     return new Promise(async (resolve, reject) => {
         const Discord = moduleRequire('discord.js');
         try {
-            if (message.channel?.parent?.id != bot.configs.general.channels.tempvoice_lobby) return resolve(false);
+            if (message.channel?.parent?.id != bot.configs.general.channels.tempvoice_category) return resolve(false);
 
             var member = message.member;
             if (member.partial) member = await member.fetch({ cache: true });
