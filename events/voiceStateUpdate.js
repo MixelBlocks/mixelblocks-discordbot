@@ -55,7 +55,7 @@ module.exports = async (bot, oldState, newState) => {
         channel.setParent(category);
         channel.setUserLimit(6);
         newState.member.voice.setChannel(channel);
-        bot.db.insertAsync('temp_voice', { channel: channel.id, owner: newState.member.id });
+        bot.db.insertAsync('temp_voice', { channel: channel.id, owner: newState.member.id, updates: 0 });
         return;
     }
     if (oldState.channel.parent.id != category) return;

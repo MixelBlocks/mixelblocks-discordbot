@@ -66,7 +66,7 @@ module.exports.run = async (bot, message, label, args, prefix) => {
 };
 
 module.exports.active = true;
-module.exports.similarityCheck = false;
+module.exports.similarityCheck = true;
 
 module.exports.aliases = [];
 

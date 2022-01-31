@@ -52,7 +52,7 @@ module.exports.run = async (bot, interaction) => {
             return interaction.reply({ content: 'Du befindest dich in keinem Voice Kanal', ephemeral: true });
         }
 
-        var channelObject = bot.db.queryAsync('temp_voice', { channel: currentChannel.id }).catch((err) => {});
+        var channelObject = await bot.db.queryAsync('temp_voice', { channel: currentChannel.id }).catch((err) => {});
 
         if (!channelObject && channelObject.length < 1) return interaction.reply({ content: 'Der Kanal in dem du dich befindest ist kein TempVoice Kanal.', ephemeral: true });
 
@@ -66,10 +66,20 @@ module.exports.run = async (bot, interaction) => {
 
         switch (subCommand) {
             case 'name': {
-                currentChannel.edit({
-                    name: interaction.options.getString('name').slice(0, 20),
+                var updates = 0;
+                if (channelObject?.updates != null) updates = 0 + channelObject.updates;
+                if (updates >= 1) {
+                    return interaction.reply({ content: 'Du kannst den Namen nur 1 mal ändern.', ephemeral: true });
+                }
+                var name = interaction.options.getString('name');
+                if (!name || name == '') {
+                    return interaction.reply({ content: 'Der Name konnte nicht validiert werden.', ephemeral: true });
+                }
+                await bot.db.updateAsync('temp_voice', { channel: currentChannel.id }, { updates: updates + 1 });
+                await currentChannel.edit({
+                    name: name.slice(0, 20),
                 });
-                return interaction.reply({ content: 'Der name des Kanals wurde auf `' + interaction.options.getString('name') + '` gesetzt.', ephemeral: true });
+                return interaction.reply({ content: 'Der name des Kanals wurde auf `' + name.slice(0, 20) + '` gesetzt.', ephemeral: true });
             }
 
             case 'ban': {
@@ -78,28 +88,32 @@ module.exports.run = async (bot, interaction) => {
                 if (toBan.voice?.channel != null) {
                     toBan.voice?.disconnect('Was banned from channel!');
                 }
-                currentChannel.permissionOverwrites.edit(toBan.id, {
+                await currentChannel.permissionOverwrites.edit(toBan.id, {
                     CONNECT: false,
                 });
                 return interaction.reply({ content: 'Der Benutzer wurde gesperrt.', ephemeral: true });
             }
 
             case 'limit': {
-                currentChannel.edit({
-                    userLimit: interaction.options.getNumber('limit'),
+                var limit = interaction.options.getNumber('limit');
+                if (!limit || limit < 2 || limit > 99) {
+                    limit = 6;
+                }
+                await currentChannel.edit({
+                    userLimit: limit,
                 });
-                return interaction.reply({ content: 'Die Größe des Kanals wurde auf `' + interaction.options.getNumber('limit') + '` gesetzt.', ephemeral: true });
+                return interaction.reply({ content: 'Die Größe des Kanals wurde auf `' + limit + '` gesetzt.', ephemeral: true });
             }
 
             case 'lock': {
-                currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
+                await currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
                     CONNECT: false,
                 });
                 return interaction.reply({ content: 'Der Kanal wurde gesperrt.', ephemeral: true });
             }
 
             case 'unlock': {
-                currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
+                await currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
                     CONNECT: true,
                 });
                 return interaction.reply({ content: 'Der Kanal wurde entsperrt.', ephemeral: true });
@@ -126,7 +140,7 @@ module.exports.data = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName('name')
-            .setDescription('Hiermit kannst du den Kanal Namen ändern. ( Bis zu 32 Buchstaben )')
+            .setDescription('Hiermit kannst du den Kanal Namen ändern. ( Bis zu 20 Buchstaben )')
             .addStringOption((option) => option.setName('name').setDescription('Neuer Name des Kanals').setRequired(true))
     )
     .addSubcommand((subcommand) =>
