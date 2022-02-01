@@ -51,7 +51,7 @@ module.exports = async (bot, member) => {
 
     var index = Math.floor(Math.random() * bot.configs.welcome.messages.length);
     if (index < 0) index = 0;
-    if (index >= activities_list.length) index = bot.configs.welcome.messages.length - 1;
+    if (index >= bot.configs.welcome.messages.length) index = bot.configs.welcome.messages.length - 1;
 
     let message = bot.configs.welcome.messages[index]
         .replace(/{user}/g, `<@${member.id}>`)
