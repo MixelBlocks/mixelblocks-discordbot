@@ -48,7 +48,7 @@ module.exports.run = async (bot, interaction) => {
     const Discord = moduleRequire('discord.js');
 
     try {
-        if (interaction.member.id != '427212136134213644') return interaction.reply({ content: 'Dieses Feature ist noch nicht implementiert.', ephemeral: true });
+        // if (interaction.member.id != '427212136134213644') return interaction.reply({ content: 'Dieses Feature ist noch nicht implementiert.', ephemeral: true });
 
         var categoryOpened = await bot.channels.fetch(openedID);
         var categoryClosed = await bot.channels.fetch(closedID);
