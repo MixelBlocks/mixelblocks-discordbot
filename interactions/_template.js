@@ -34,7 +34,17 @@
  *     Minecraft:       mixelblocks.de:25565
  *
  * @author LuciferMorningstarDev - https://github.com/LuciferMorningstarDev
- * @since 28.01.2022
+ * @since 03.02.2022
  *
  */
 
+module.exports.run = async (bot, interaction) => {
+    const Discord = moduleRequire('discord.js');
+
+    try {
+    } catch (error) {
+        bot.error('Error in Interaction Command template', error);
+    }
+};
+
+module.exports.active = true;

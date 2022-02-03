@@ -48,6 +48,17 @@ module.exports = async (bot) => {
     await bot.guilds.fetch(bot.configs.general.guild_id).then(async (guild) => {
         bot.logChannel = await guild.channels.fetch(bot.configs.general.channels.bot_log).catch(bot.catch);
         bot.errorChannel = await guild.channels.fetch(bot.configs.general.channels.error_log).catch(bot.catch);
+        // TODO: add ids to configs
+        await guild.channels.fetch('938800709535678504').then(async (channel) => {
+            bot.ticketMessage = await channel.messages.fetch('938804408278483004');
+            var components = [new Discord.MessageActionRow().addComponents(new Discord.MessageButton().setLabel('Ticket Erstellen').setStyle('DANGER').setEmoji('🎫').setCustomId('create_new_ticket'))];
+            if (!bot.ticketMessage.components || bot.ticketMessage.components.length < 1) {
+                bot.ticketMessage.edit({
+                    embeds: bot.ticketMessage.embeds,
+                    components: components,
+                });
+            }
+        });
     });
 
     // update random status

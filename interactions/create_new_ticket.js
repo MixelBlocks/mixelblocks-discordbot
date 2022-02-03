@@ -34,35 +34,24 @@
  *     Minecraft:       mixelblocks.de:25565
  *
  * @author LuciferMorningstarDev - https://github.com/LuciferMorningstarDev
- * @since 28.01.2022
+ * @since 03.02.2022
  *
  */
 
-const { SlashCommandBuilder } = require('@discordjs/builders');
+// TODO: add ids to configs
+const openedID = '938800588077015071'; // ID of category for opened tickets
+const closedID = '938800632570187796'; // ID of category for closed tickets
 
 module.exports.run = async (bot, interaction) => {
     const Discord = moduleRequire('discord.js');
 
     try {
-        var name = interaction.options.getString('user');
-        var embed = await bot.tools.discord.generateEmbed({
-            title: `Hier ist der Skin von: **${name.replace('_', '\\_')}**`,
-            thumbnail: `https://mc-heads.net/avatar/${name}`,
-            image: `https://mc-heads.net/body/${name}/right`,
-            description: `
-[Download](https://mc-heads.net/download/${name})
-[Ansehen](https://mc-heads.net/skin/${name})      
-                `,
-        });
-        interaction.reply({ embeds: [embed], ephemeral: true });
+        if (interaction.member.id != '427212136134213644') return interaction.reply({ content: 'Dieses Feature ist noch nicht implementiert.', ephemeral: true });
+
+        interaction.reply({ content: 'Channel Created.', ephemeral: true });
     } catch (error) {
-        bot.error('Error in Slash Command Skin', error);
+        bot.error('Error in Interaction Command create_new_ticket', error);
     }
 };
-
-module.exports.data = new SlashCommandBuilder()
-    .setName('skin')
-    .setDescription('Mit diesem Command kannst du skins von anderen Minecraft Spielern per UUID oder Username bekommen!')
-    .addStringOption((option) => option.setName('user').setDescription('Username oder UUID des Spielers').setRequired(true));
 
 module.exports.active = true;

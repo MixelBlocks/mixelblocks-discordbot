@@ -45,7 +45,7 @@ module.exports.run = async (bot, interaction) => {
 
     try {
         interaction.reply({ content: 'Pong!', ephemeral: true });
-    } catch (errpr) {
+    } catch (error) {
         bot.error('Error in Slash Command Ping', error);
     }
 };

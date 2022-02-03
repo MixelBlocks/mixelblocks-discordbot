@@ -241,7 +241,7 @@ fs.readdir('./interactions/', (error, files) => {
             if (props.active == true) {
                 props.isCommand = true;
                 let commandName = file.split('.')[0];
-                bot.interaction_commands.set(commandName, props);
+                bot.interactions.set(commandName, props);
                 bot.logger.debug(`[INTERACTION COMMAND LOADED] >> ${commandName}`);
             }
         } catch (error) {
