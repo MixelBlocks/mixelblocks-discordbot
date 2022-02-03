@@ -48,6 +48,17 @@ module.exports.run = async (bot, interaction) => {
     const Discord = moduleRequire('discord.js');
 
     try {
+        if (interaction.channel.parent?.id == closedID) return interaction.reply({ content: 'Das Ticket ist bereits geschlossen.', ephemeral: true });
+        var openedTickets = await bot.db.queryAsync('tickets', { channel: interaction.channel.id });
+        var ticket = openedTickets[0];
+        if (!ticket.closed) {
+            interaction.reply({ content: 'Closing ticket.', ephemeral: true });
+            var newName = interaction.channel.name.replace('open-', 'closed-');
+            await interaction.channel.setName(newName);
+            await interaction.channel.setParent(closedID);
+            await bot.db.updateAsync('tickets', { channel: interaction.channel.id }, { closed: Date.now() });
+            interaction.reply({ content: 'Closing ticket.', ephemeral: true });
+        } else return interaction.reply({ content: 'Das Ticket ist bereits geschlossen.', ephemeral: true });
     } catch (error) {
         bot.error('Error in Interaction Command close_ticket', error);
     }

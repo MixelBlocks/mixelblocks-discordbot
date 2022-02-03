@@ -48,6 +48,10 @@ module.exports.run = async (bot, interaction) => {
     const Discord = moduleRequire('discord.js');
 
     try {
+        if (interaction.channel.parent?.id != closedID) {
+            return interaction.reply({ content: 'Das Ticket ist noch nicht geschlossen.', ephemeral: true });
+        }
+        interaction.channel.delete();
     } catch (error) {
         bot.error('Error in Interaction Command delete_ticket', error);
     }
