@@ -55,9 +55,10 @@ module.exports.run = async (bot, interaction) => {
             interaction.reply({ content: 'Closing ticket.', ephemeral: true });
             var newName = interaction.channel.name.replace('open-', 'closed-');
             await interaction.channel.setName(newName);
-            await interaction.channel.setParent(closedID);
             await bot.db.updateAsync('tickets', { channel: interaction.channel.id }, { closed: Date.now() });
-            interaction.reply({ content: 'Closing ticket.', ephemeral: true });
+            await interaction.channel.setParent(closedID).then((channel) => {
+                channel.send({ content: 'Closed ticket.' });
+            });
         } else return interaction.reply({ content: 'Das Ticket ist bereits geschlossen.', ephemeral: true });
     } catch (error) {
         bot.error('Error in Interaction Command close_ticket', error);
