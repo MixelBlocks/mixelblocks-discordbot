@@ -78,23 +78,13 @@ module.exports.run = async (bot, interaction) => {
         var newTicketChannel = await interaction.guild.channels.create('open-' + newTicketID, {
             reason: 'Ticket opened',
             type: 'GUILD_TEXT',
-            permissionOverwrites: [
-                {
-                    id: interaction.guild.id,
-                    deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-                },
-                {
-                    id: interaction.member.id,
-                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-                },
-                {
-                    id: '938822964634325002', // TODO: config ticket supporter role entry
-                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-                },
-            ],
         });
 
         await newTicketChannel.setParent(openedID);
+
+        await newTicketChannel.permissionOverwrites.edit(interaction.guild.id, { VIEW_CHANNEL: false });
+        await newTicketChannel.permissionOverwrites.edit(interaction.member.id, { SEND_MESSAGES: true, VIEW_CHANNEL: true });
+        await newTicketChannel.permissionOverwrites.edit('938822964634325002', { SEND_MESSAGES: true, VIEW_CHANNEL: true });
 
         var dbEntryDate = Date.now();
         await bot.db.insertAsync('tickets', {
@@ -117,7 +107,7 @@ Bitte beschreibe uns ausführlich dein Anliegen und bitte uns stelle keine MetaF
         });
 
         await newTicketChannel.send({
-            content: '<@' + interaction.member.id + '>',
+            content: '<@' + interaction.member.id + '> | ' + '<@&938822964634325002>',
             embeds: [embed],
             components: [new Discord.MessageActionRow().addComponents([new Discord.MessageButton().setLabel('Ticket schliessen').setStyle('DANGER').setEmoji('🎫').setCustomId('close_ticket'), new Discord.MessageButton().setLabel('Ticket löschen').setStyle('DANGER').setEmoji('🎫').setCustomId('delete_ticket')])],
         });
