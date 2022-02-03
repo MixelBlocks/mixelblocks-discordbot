@@ -57,6 +57,21 @@ module.exports.run = async (bot, interaction) => {
 
         if (categoryOpened.children.size >= 50) return interaction.reply({ content: 'Aktuell sind zuviele Tickets geöffnet. Bitte versuche es später erneut.', ephemeral: true });
 
+        var runCreation = true;
+
+        var openedTickets = await bot.db.queryAsync('tickets', { creator: interaction.member.id });
+        if (openedTickets != null && openedTickets.length >= 1) {
+            openedTickets.forEach((ticket) => {
+                if (!ticket.closed) {
+                    runCreation = false;
+                    interaction.reply({ content: 'Du hast bereits ein geöffnetes Ticket. <#' + ticket.channel + '>', ephemeral: true });
+                    return;
+                }
+            });
+        }
+
+        if (!runCreation) return;
+
         const uid = new Snowflake();
         var newTicketID = uid.getUniqueID();
 
@@ -83,9 +98,10 @@ module.exports.run = async (bot, interaction) => {
 
         var dbEntryDate = Date.now();
         await bot.db.insertAsync('tickets', {
-            id: '' + newTicketID,
+            id: uid,
             creator: interaction.member.id,
             channel: newTicketChannel.id,
+            closed: false,
             createdAt: dbEntryDate,
             messages: [{ at: dbEntryDate, user: 'system', content: 'Created...' }],
         });
