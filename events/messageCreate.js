@@ -46,6 +46,9 @@ const {
 var commandLastPost = {};
 var messageTriple = {};
 
+// TODO: add ids to configs
+const openedID = '938800588077015071'; // ID of category for opened tickets
+
 module.exports = async (bot, message) => {
     // dont react to bots and dms
     if (message.author.bot) return;
@@ -72,6 +75,21 @@ module.exports = async (bot, message) => {
 
     // dont react to empty messages
     if (!message.content) return;
+
+    if (message.channel?.parent?.id == openedID) {
+        var openedTickets = await bot.db.queryAsync('tickets', { channel: message.channel.id });
+        var ticket = openedTickets[0];
+        if (!ticket.closed) {
+            await bot.db.updateAsync(
+                'tickets',
+                { channel: message.channel.id },
+                {
+                    messages: [{ at: Date.now(), user: message.author.id, content: message.content }, ...ticket.messages],
+                }
+            );
+        }
+        return;
+    }
 
     // repeat last 3 messages id authors different and the text to lowercase is the same :D
     if (!messageTriple[message.channel.id] || messageTriple[message.channel.id].content.toLowerCase() != message.content.toLowerCase()) {
